@@ -12,23 +12,14 @@
 
 #define BUFF_SIZE 1024
 
-/*struct tagBITMAPFILEHEADER
+typedef struct tagBITMAPFILEHEADER
 {
-	uint16_t     bfType;
-	uint32_t     bfSize;
-	uint16_t     bfReserved1;
-	uint16_t     bfReserved2;
-	uint32_t     bfOffBits;
-} __attribute__((__packed__,__aligned__(1)));*/
-
-/*struct tagBITMAPFILEHEADER
-{
-	uint8_t		bfType[2];
-	uint8_t     bfSize[4];
-	uint16_t     bfReserved1;
-	uint16_t     bfReserved2;
-	uint32_t     bfOffBits;
-} BITMAPINFOHEADER;*/ 
+    uint16_t     bfType;
+    uint32_t     bfSize;
+    uint16_t     bfReserved1;
+    uint16_t     bfReserved2;
+    uint32_t     bfOffBits;
+} __attribute__((__packed__)) FileHeader;
 
 typedef struct tagBITMAPINFOHEADER
 {
@@ -43,8 +34,15 @@ typedef struct tagBITMAPINFOHEADER
 	int32_t      biYPelsPerMeter;
 	uint32_t     biClrUsed;
 	uint32_t     biClrImportant;
-} BITMAPINFOHEADER;
+} __attribute__((__packed__)) InfoHeader;
 
+typedef struct	s_headers
+{
+	FileHeader	*file_header;
+	InfoHeader	*image_header;
+}				t_headers;
+
+#define FULL_HEADER_SIZE (sizeof(FileHeader) + sizeof(InfoHeader))
 
 void    print_bytes(uint8_t *bytes, size_t len);
 
