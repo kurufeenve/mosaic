@@ -38,8 +38,8 @@ typedef struct tagBITMAPINFOHEADER
 
 typedef struct	s_headers
 {
-	FileHeader	*file_header;
-	InfoHeader	*image_header;
+	FileHeader	file_header;
+	InfoHeader	image_header;
 }				t_headers;
 
 #define FULL_HEADER_SIZE (sizeof(FileHeader) + sizeof(InfoHeader))
