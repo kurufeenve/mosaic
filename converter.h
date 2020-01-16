@@ -10,7 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define BUFF_SIZE 1024
+#define RES_FILE_PATH "/mnt/c/Users/Vlad/Desktop/processed_image.bmp\0"
 
 typedef struct tagBITMAPFILEHEADER
 {
