@@ -54,4 +54,5 @@ void	write_to_file(uint8_t *data, size_t len)
 		exit(1);
 	}
 	close(fd);
+	system("chmod 755 processed_image.bmp");
 }

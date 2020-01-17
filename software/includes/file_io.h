@@ -10,7 +10,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#define RES_FILE_PATH "/mnt/c/Users/Vlad/Desktop/processed_image.bmp\0"
+#define RES_FILE_PATH "processed_image.bmp\0"
 
 typedef struct tagBITMAPFILEHEADER
 {

@@ -25,6 +25,13 @@ void	put_pixel(uint8_t *data, t_color color, t_coords coords, t_headers headers)
 		data[pixel_number + GREEN] = color.channel[GREEN];
 		data[pixel_number + BLUE] = color.channel[BLUE];
 	}
+	if (headers.image_header.biBitCount == 24) //does not work yet. problem in pixel_number calculation
+	{
+		pixel_number = headers.file_header.bfOffBits + (coords.y * headers.image_header.biWidth + coords.x) * 3;
+		data[pixel_number] = color.channel[RED];
+		data[pixel_number + 1] = color.channel[GREEN];
+		data[pixel_number + 2] = color.channel[BLUE];
+	}
 }
 
 void	image_processing(uint8_t *bytes, t_headers headers)

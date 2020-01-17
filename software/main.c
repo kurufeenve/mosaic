@@ -10,7 +10,7 @@ int		main(int argc, char** argv)
 		printf("wrong number of arguments\n");
 		return(0);
 	}
-	system("rm -rf /mnt/c/Users/Vlad/Desktop/processed_image.bmp");
+	system("rm -rf processed_image.bmp");
 	file_buffering(argv[1], &file_data, &headers);
 	image_processing(file_data, headers);
 	write_to_file(file_data, headers.file_header.bfSize);
