@@ -1,14 +1,14 @@
-#ifndef CONVERTER_H
-#define CONVERTER_H
+#ifndef FILE_IO_H
+#define FILE_IO_H
 
-#include <stdio.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <stdint.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
+#include <stdio.h>
 
 #define RES_FILE_PATH "/mnt/c/Users/Vlad/Desktop/processed_image.bmp\0"
 
@@ -44,6 +44,7 @@ typedef struct	s_headers
 
 #define FULL_HEADER_SIZE (sizeof(FileHeader) + sizeof(InfoHeader))
 
-void    print_bytes(uint8_t *bytes, size_t len);
+void	file_buffering(char *file_name, uint8_t **data, t_headers *headers);
+void	write_to_file(uint8_t *data, size_t len);
 
 #endif

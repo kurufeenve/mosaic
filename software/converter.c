@@ -1,4 +1,4 @@
-#include "converter.h"
+#include "./includes/converter.h"
 
 void	print_bytes(uint8_t *bytes, size_t len)
 {
@@ -13,83 +13,33 @@ void	print_bytes(uint8_t *bytes, size_t len)
 	printf("\n");
 }
 
-void	image_processing(uint8_t *bytes, size_t len, size_t start_from)
+void	put_pixel(uint8_t *data, t_color color, t_coords coords, t_headers headers)
 {
-	for (; start_from < len; start_from++)
+	size_t	pixel_number;
+
+	if (headers.image_header.biBitCount == 32)
 	{
-		bytes[start_from] = 0xff;
+		pixel_number = headers.file_header.bfOffBits + (coords.y * headers.image_header.biWidth + coords.x) * 4;
+		data[pixel_number + RESERVED] = color.channel[RESERVED];
+		data[pixel_number + RED] = color.channel[RED];
+		data[pixel_number + GREEN] = color.channel[GREEN];
+		data[pixel_number + BLUE] = color.channel[BLUE];
 	}
 }
 
-void	file_buffering(char *file_name, uint8_t **data, t_headers *headers)
+void	image_processing(uint8_t *bytes, t_headers headers)
 {
-	int		fd;
-	uint8_t	buff[1];
-	uint8_t	headers_buff[FULL_HEADER_SIZE];
-	size_t	offset;
-	
-	fd = open(file_name, O_RDONLY);
-	if (fd < 0)
-	{
-		printf("error during file openning\n");
-		exit(1);
-	}
-	if (read(fd, headers_buff, FULL_HEADER_SIZE) <= 0)
-	{
-		printf("reading error\n");
-		exit(1);
-	}
+	t_coords	coords;
+	t_color		color;
 
-	memcpy((uint8_t *)&headers->file_header, headers_buff, sizeof(FileHeader));
-	memcpy((uint8_t *)&headers->image_header, (headers_buff + sizeof(FileHeader)), sizeof(InfoHeader));
-	*data = (uint8_t *)malloc(sizeof(uint8_t) * headers->file_header.bfSize);
-	printf("headers->file_header->bfSize = %d\n", headers->file_header.bfSize);
-	memcpy(*data, headers_buff, FULL_HEADER_SIZE);
-	offset = FULL_HEADER_SIZE;
-	for (uint32_t i = FULL_HEADER_SIZE; i < headers->file_header.bfSize; i++)
+	color.color = 0xff55c5cf;
+	for (int i = 0; i < headers.image_header.biHeight; i++)
 	{
-		if (read(fd, buff, 1) <= 0)
+		for (int j = 0; j < headers.image_header.biWidth; j++)
 		{
-			printf("reading error\n");
-			exit(1);
+			coords.x = j;
+			coords.y = i;
+			put_pixel(bytes, color, coords, headers);
 		}
-		memcpy(*data + offset, buff, 1);
-		offset++;
 	}
-	close(fd);
-}
-
-void	write_to_file(uint8_t *data, size_t len)
-{
-	int		fd;
-
-	fd = open(RES_FILE_PATH, O_WRONLY | O_CREAT | O_TRUNC);
-	if (fd < 0)
-	{
-		printf("error during file openning for writing\n");
-		exit(1);
-	}
-	if (write(fd, data, len) <= 0)
-	{
-		printf("reading error\n");
-		exit(1);
-	}
-	close(fd);
-}
-
-int		main(int argc, char** argv)
-{
-	t_headers	headers;
-	uint8_t		*file_data;
-
-	if (argc != 2)
-	{
-		printf("wrong number of arguments\n");
-		return(0);
-	}
-	file_buffering(argv[1], &file_data, &headers);
-	image_processing(file_data, headers.file_header.bfSize, headers.file_header.bfOffBits);
-	write_to_file(file_data, headers.file_header.bfSize);
-	system("leaks a.out");
-	return(0);
 }
