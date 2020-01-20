@@ -1,23 +1,24 @@
-SRC=main.c converter.c file_io.c
-INC=-I ./includes/
-OBJ=$(SRC:.cpp=.o)
-EXE=converter
-CC=gcc
-CFLAGS=-c -Wall -Wextra
-LDFLAGS=
+NAME = converter
 
-all: $(SRC) $(EXE)
-	
-$(EXE): $(OBJ) 
-	$(CC) $(LDFLAGS) $(OBJ) -o $@
+HEADER = includes
 
-$(OBJECTS):
-	$(CC) $(CFLAGS) $(SRC) -o $(OBJ) $(INC)
+OFILES = main.o converter.o file_io.o analyzer.o
+
+FLAG = -Wall -Wextra #-Werror
+
+all: $(NAME)
+
+$(NAME): $(OFILES)
+	@ar rc $(NAME) $(OFILES)
+	@ranlib $(NAME)
+
+%.o : %.c
+	@gcc $(FLAG) -c -o $@ $< -I $(HEADER)
 
 clean:
-	rm -rf *.o
+	@rm -rf $(OFILES)
 
 fclean: clean
-	rm -rf $(EXE)
+	@rm -f $(NAME)
 
 re: fclean all

@@ -1,14 +1,16 @@
-#include "include/analyzer.h"
+#include "includes/analyzer.h"
 
-void	pixel_iterator(uint8_t *data, t_headers headers, (void)(*f)(void *, void *, void *, void *))
+void	pixel_iterator(uint8_t *data, t_headers headers, void *ptr, void (*f)(void *, void *, void *, void *))
 {
+	size_t	pixel_number;
+
 	for (int i = 0; i < headers.image_header.biHeight; i++)
 	{
 		for (int j = 0; j < headers.image_header.biWidth; j++)
 		{
-			coords.x = j;
-			coords.y = i;
-			f((void *)data, (void *)&color, (void *)&coords, (void *)&headers);
+			pixel_number = headers.file_header.bfOffBits + (i * \
+headers.image_header.biWidth + j) * headers.image_header.biBitCount / 8;
+			f((void *)data, ptr, (void *)&pixel_number, NULL);
 		}
 	}
 }
@@ -37,25 +39,30 @@ uint8_t	max(uint8_t a, uint8_t b)
 	}
 }
 
-void	check_pixel(void *bytes, void *min_max, void *coor, void *head)
+void	check_pixel(void *bytes, void *mn_mx, void *pxl_nbr, void *head)
 {
 	uint8_t 	*data;
-	size_t		pixel_number;
-	t_coords	coords;
-	t_headers	headers;
+	size_t		*pixel_number;
+	t_min_max	*min_max;
 
 	data = (uint8_t *)bytes;
-	coords = (t_coords)*coor;
-	headers = (t_headers)*head;
-	memset(min_max, 0, sizeof(t_min_max));
+	pixel_number = (size_t *)pxl_nbr;
+	memset(mn_mx, 0, sizeof(t_min_max));
+	min_max = (t_min_max *)mn_mx;
 	if (headers.image_header.biBitCount == 32)
 	{
-		pixel_number = headers.file_header.bfOffBits + (coords.y * headers.image_header.biWidth + coords.x) * 4;
-		min_max->r_min = min(data[pixel_number + RED], min_max->r_min);
-		min_max->r_max = max(data[pixel_number + RED], min_max->r_max);
-		min_max->r_min = min(data[pixel_number + GREEN], min_max->r_min);
-		min_max->r_max = max(data[pixel_number + GREEN], min_max->r_max);
-		min_max->r_min = min(data[pixel_number + BLUE], min_max->r_min);
-		min_max->r_max = max(data[pixel_number + BLUE], min_max->r_max);
+		*min_max.r_min = min(data[pixel_number + RED], *min_max.r_min);
+		*min_max.r_max = max(data[pixel_number + RED], *min_max.r_max);
+		*min_max.r_min = min(data[pixel_number + GREEN], *min_max.r_min);
+		*min_max.r_max = max(data[pixel_number + GREEN], *min_max.r_max);
+		*min_max.r_min = min(data[pixel_number + BLUE], *min_max.r_min);
+		*min_max.r_max = max(data[pixel_number + BLUE], *min_max.r_max);
 	}
+}
+
+void	madian_cut(uint8_t *bytes, t_headers headers)
+{
+	t_min_max	min_max;
+
+	pixel_iterator(bytes, headers, (void *)&min_max, &check_pixel);
 }
