@@ -2,7 +2,7 @@ NAME = converter
 
 HEADER = includes
 
-OFILES = main.o converter.o file_io.o analyzer.o
+OFILES = main.o converter.o file_io.o #analyzer.o
 
 FLAG = -Wall -Wextra #-Werror
 

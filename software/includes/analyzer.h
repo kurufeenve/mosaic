@@ -29,6 +29,7 @@ void	pixel_iterator(uint8_t *data, t_headers headers, void *ptr, void (*f)(void 
 uint8_t	min(uint8_t a, uint8_t b);
 uint8_t	max(uint8_t a, uint8_t b);
 void	check_pixel(void *bytes, void *mn_mx, void *coor, void *head);
-void	madian_cut(uint8_t *bytes, t_headers headers);
+void	m_delta_calc(t_min_max min_max, t_color_delta *d);
+void	median_cut(uint8_t *bytes, t_headers headers);
 
 #endif

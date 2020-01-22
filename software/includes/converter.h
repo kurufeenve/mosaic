@@ -21,10 +21,10 @@ typedef struct	s_coords
 enum			e_chanels
 {
 	
-	RESERVED,
 	RED,
 	GREEN,
-	BLUE
+	BLUE,
+	RESERVED
 };
 
 void    print_bytes(uint8_t *bytes, size_t len);
