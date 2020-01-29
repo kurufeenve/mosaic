@@ -2,6 +2,7 @@
 #define ANALYZER_H
 
 #include "converter.h"
+#include <stdlib.h>
 
 /*#define max(a,b) \
    ({ __typeof__ (a) _a = (a); \

@@ -72,6 +72,7 @@ void	m_delta_calc(t_min_max min_max, t_color_delta *d)
 void	median_cut(uint8_t *bytes, t_headers headers)
 {
 	t_min_max	min_max;
+	t_color		*pixels;
 
 	memset(&min_max, 0, sizeof(min_max));
 	min_max.r_min = 255;
