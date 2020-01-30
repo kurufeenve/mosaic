@@ -29,8 +29,9 @@ typedef struct	s_color_delta
 void	pixel_iterator(uint8_t *data, t_headers headers, void *ptr, void (*f)(void *, void *, void *, void *));
 uint8_t	min(uint8_t a, uint8_t b);
 uint8_t	max(uint8_t a, uint8_t b);
-void	check_pixel(void *bytes, void *mn_mx, void *coor, void *head);
+void	check_pixel(void *bytes, void *mn_mx, void *pxl_nbr, void *head);
 void	m_delta_calc(t_min_max min_max, t_color_delta *d);
+void	fill_pixels(void *bytes, void *pix, void *pxl_nbr, void *empty);
 void	median_cut(uint8_t *bytes, t_headers headers);
 
 #endif

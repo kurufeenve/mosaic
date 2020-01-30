@@ -69,6 +69,23 @@ void	m_delta_calc(t_min_max min_max, t_color_delta *d)
 	d->b_delta = min_max.b_max - min_max.b_min;
 }
 
+void	fill_pixels(void *bytes, void *pix, void *pxl_nbr, void *empty)
+{
+	uint8_t 	*data;
+	size_t		*pixel_number;
+	t_color		*pixels;
+
+	data = (uint8_t *)bytes;
+	pixel_number = (size_t *)pxl_nbr;
+	pixels = (t_color *)pix;
+	printf("pixels->color = %x\n", pixels[*pixel_number].color);
+	pixels[*pixel_number].channel[RED] = data[*pixel_number + RED];
+	pixels[*pixel_number].channel[GREEN] = data[*pixel_number + GREEN];
+	pixels[*pixel_number].channel[BLUE] = data[*pixel_number + BLUE];
+	pixels[*pixel_number].channel[RESERVED] = data[*pixel_number + RESERVED];
+	printf("pixels->color = %x\n", pixels[*pixel_number].color);
+}
+
 void	median_cut(uint8_t *bytes, t_headers headers)
 {
 	t_min_max	min_max;
@@ -79,5 +96,7 @@ void	median_cut(uint8_t *bytes, t_headers headers)
 	min_max.g_min = 255;
 	min_max.b_min = 255;
 	pixel_iterator(bytes, headers, (void *)&min_max, &check_pixel);
-	
+	pixels = (t_color *)malloc(sizeof(t_color) * headers.image_header.biHeight * headers.image_header.biWidth);
+	memset(pixels, 0, headers.image_header.biHeight * headers.image_header.biWidth);
+	pixel_iterator(bytes, headers, (void *)pixels, fill_pixels);
 }
