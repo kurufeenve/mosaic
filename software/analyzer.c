@@ -1,5 +1,10 @@
 #include "includes/analyzer.h"
 
+void	bytes_to_pixels(uint8_t *data, t_headers headers, t_)
+{
+	
+}
+
 void	pixel_iterator(uint8_t *data, t_headers headers, void *ptr, void (*f)(void *, void *, void *, void *))
 {
 	size_t	pixel_number;
@@ -69,34 +74,56 @@ void	m_delta_calc(t_min_max min_max, t_color_delta *d)
 	d->b_delta = min_max.b_max - min_max.b_min;
 }
 
-void	fill_pixels(void *bytes, void *pix, void *pxl_nbr, void *empty)
+void	fill_pixels(void *bytes, void *pix, void *pxl_nbr, void *head)
 {
 	uint8_t 	*data;
 	size_t		*pixel_number;
 	t_color		*pixels;
+	t_headers	*headers;
+	size_t		pixel_index;
 
 	data = (uint8_t *)bytes;
 	pixel_number = (size_t *)pxl_nbr;
 	pixels = (t_color *)pix;
-	printf("pixels->color = %x\n", pixels[*pixel_number].color);
-	pixels[*pixel_number].channel[RED] = data[*pixel_number + RED];
-	pixels[*pixel_number].channel[GREEN] = data[*pixel_number + GREEN];
-	pixels[*pixel_number].channel[BLUE] = data[*pixel_number + BLUE];
-	pixels[*pixel_number].channel[RESERVED] = data[*pixel_number + RESERVED];
-	printf("pixels->color = %x\n", pixels[*pixel_number].color);
+	headers = (t_headers *)head;
+	pixel_index = (*pixel_number - headers->file_header.bfOffBits) / 4;
+	pixels[pixel_index].channel[RED] = data[*pixel_number + RED];
+	pixels[pixel_index].channel[GREEN] = data[*pixel_number + GREEN];
+	pixels[pixel_index].channel[BLUE] = data[*pixel_number + BLUE];
+	pixels[pixel_index].channel[RESERVED] = data[*pixel_number + RESERVED];
+}
+
+int		median_compare_r(const void *pixel1, const void *pixel2)
+{
+	t_color	*p1;
+	t_color *p2;
+
+	p1 = (t_color *)pixel1;
+	p2 = (t_color *)pixel2;
+	if (p1->channel[RED] == p2->channel[RED])
+	{
+		if (p1->channel[GREEN] == p2->channel[GREEN])
+		{
+			return (int)p1->channel[BLUE] - (int)p2->channel[BLUE];
+		}
+		return (int)p1->channel[GREEN] - (int)p2->channel[GREEN];
+	}
+	return (int)p1->channel[RED] - (int)p2->channel[RED];
 }
 
 void	median_cut(uint8_t *bytes, t_headers headers)
 {
 	t_min_max	min_max;
 	t_color		*pixels;
+	size_t		total_pixels;
 
+	total_pixels = headers.image_header.biHeight * headers.image_header.biWidth;
 	memset(&min_max, 0, sizeof(min_max));
 	min_max.r_min = 255;
 	min_max.g_min = 255;
 	min_max.b_min = 255;
 	pixel_iterator(bytes, headers, (void *)&min_max, &check_pixel);
-	pixels = (t_color *)malloc(sizeof(t_color) * headers.image_header.biHeight * headers.image_header.biWidth);
-	memset(pixels, 0, headers.image_header.biHeight * headers.image_header.biWidth);
+	pixels = (t_color *)malloc(sizeof(t_color) * total_pixels);
+	memset(pixels, 0, total_pixels);
 	pixel_iterator(bytes, headers, (void *)pixels, fill_pixels);
 }
