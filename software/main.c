@@ -1,10 +1,17 @@
 #include "./includes/analyzer.h"
 #include "./includes/converter.h"
 
+void	init_test_colors(t_color *test_colors)
+{
+	test_colors[0].color = 0x64AAC1;
+	test_colors[1].color = 0x1F81A7;
+}
+
 int		main(int argc, char** argv)
 {
 	t_headers	headers;
 	uint8_t		*file_data;
+	t_color		test_colors[8];
 
 	if (argc != 2)
 	{
