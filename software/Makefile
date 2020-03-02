@@ -1,24 +1,41 @@
+SRC = main.c file_io.c converter.c analyzer.c
+ 
+INC = includes/
+
+SRC_DIR = ./src/
+OBJ_DIR = ./obj/
+OBJ = $(addprefix $(OBJ_DIR),$(SRC:.cpp=.o))
 NAME = converter
+CFLAG = -Werror -Wextra -Wall
+#LIB = -lcurses -lncurses
+CC = gcc
+REMAKE = rmk
 
-HEADER = includes
-
-OFILES = main.o converter.o file_io.o #analyzer.o
-
-FLAG = -Wall -Wextra #-Werror
+$(OBJ_DIR)%.o: %.c $(INC)
+		@echo "\033[0;32mCreating object files\033[0m \033[31m$@\033[0m"
+		@$(CC) $(CFLAG) -c $< -o $@
 
 all: $(NAME)
+$(NAME): $(OBJ)
+		@echo "\033[0;32mCompile solution ...\033[0m"
+		@$(CC) $(CFLAG) -o $(NAME) $(OBJ) #$(LIB)
+		@echo "\033[0;32mProgram compiled : \033[0m\033[31m$(NAME)\033[0m"
 
-$(NAME): $(OFILES)
-	@ar rc $(NAME) $(OFILES)
-	@ranlib $(NAME)
+$(OBJ): $(OBJ_DIR)
 
-%.o : %.c
-	@gcc $(FLAG) -c -o $@ $< -I $(HEADER)
+$(OBJ_DIR):
+		@mkdir $(OBJ_DIR)
 
 clean:
-	@rm -rf $(OFILES)
+		@echo "\033[0;32mCleaning object files ...\033[0m"
+		@rm -rf $(OBJ_DIR)
 
 fclean: clean
-	@rm -f $(NAME)
+		@rm -f $(NAME)
+		@echo "\033[31m$(NAME)\033[0m\033[0;32m was completely removed\033[0m"
 
-re: fclean all
+re: $(REMAKE) fclean all
+$(REMAKE):
+		@echo "\033[0;32mRemaking project \033[0m\033[31m$(NAME)\033[0m"
+
+vpath %.c $(SRC_DIR)
