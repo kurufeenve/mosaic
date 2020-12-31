@@ -30,9 +30,16 @@ void	fileToHex(char *file_name, char *hex)
 {
 	Headers		headers;
 	uint8_t		*data;
+	int			image_size;
 
 	printf("filename = %s\n", file_name);
-	readFile(file_name, (uint8_t *)&headers, data);
+	readFile(file_name, (uint8_t *)&headers, &data);
+
+	image_size = headers.file_h.bfSize - headers.file_h.bfOffBits;
+	/*for (int i = headers.file_h.bfOffBits; i < image_size; i+=4)
+	{
+		printf("%08x\n", *(uint32_t *)(&data[i]));
+	}*/
 	free(data);
 }
 
