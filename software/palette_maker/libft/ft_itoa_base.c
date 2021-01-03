@@ -9,7 +9,7 @@
 /*   Updated: 2018/04/20 16:43:08 by vordynsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#include <stdio.h>
 #include "includes/libft.h"
 
 char		*ft_itoa_base( int n, int base)

@@ -17,6 +17,6 @@ int		main(int argc, char **argv)
 	ft_strcpy(P.palette_name, argv[1]);
 	readDir(&P);
 	converter(&P);
-	system("leaks palette_maker");
+	//system("leaks palette_maker");
 	return (0);
 }

@@ -31,6 +31,7 @@ OFILES = ft_atoi.o ft_bzero.o ft_isalnum.o ft_isalpha.o ft_isascii.o ft_isdigit.
 		ft_print_bytes.o ft_get_address.o ft_endian_swap.o
 
 FLAG = -Wall -Wextra -Werror
+CC   = clang-11
 
 .PHONY: all clean fclean re
 
@@ -41,7 +42,7 @@ $(NAME): $(OFILES)
 	@ranlib $(NAME)
 
 %.o : %.c
-	@gcc $(FLAG) -c -o $@ $< -I $(HEADER)
+	@$(CC) $(FLAG) -c -o $@ $< -I $(HEADER)
 
 clean:
 	@rm -rf $(OFILES)

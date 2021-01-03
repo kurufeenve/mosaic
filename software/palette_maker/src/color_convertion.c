@@ -30,29 +30,55 @@ void	fileToHex(char *file_name, char *hex)
 {
 	Headers		headers;
 	uint8_t		*data;
-	int			image_size;
+	uint8_t		*buf;
+	int		image_size;
+	int		j;
+	Pixel		color;
+	char		*midle;
 
 	printf("filename = %s\n", file_name);
 	readFile(file_name, (uint8_t *)&headers, &data);
 
 	image_size = headers.file_h.bfSize - headers.file_h.bfOffBits;
-	/*for (int i = headers.file_h.bfOffBits; i < image_size; i+=4)
+	buf = (uint8_t *)malloc(sizeof(uint8_t) * (image_size / 2));
+	while (image_size > 7)
 	{
-		printf("%08x\n", *(uint32_t *)(&data[i]));
-	}*/
+		j = 0;
+		for (int i = 0; i < image_size - 7; i+=8)
+		{
+			color = colorAverage(*((Pixel *)(&(data[i]))),
+					*((Pixel *)(&(data[i + 4]))));
+			ft_memcpy((void *)(&(buf[j])),
+				(void *)(&(color.color)), 4);
+			j += 4;
+		}
+		ft_bzero(data, image_size);
+		image_size /= 2;
+		memcpy((void *)data, (void *)buf, image_size);
+		ft_bzero(buf, image_size);
+	}
+	j = 0;
+	for (int i = 0; i < 4; i++)
+	{
+		memcpy((void *)&hex[j], ft_itoa_base(data[i], 16), 2);
+		j += 2;
+	}
+	printf("hex = %s\n", hex);
+	free(buf);
 	free(data);
 }
 
 /********************************************/
 /*                                          */
-/*  creates pallete and writes it			*/
-/*  to the file							 	*/
+/*  creates pallete and writes it           */
+/*  to the file                             */
 /*                                          */
 /********************************************/
 void	converter(Palette *P)
 {
-	char	hex_test[] = "0x00000000";
+	char	hex_test[9];
 
+	ft_bzero(hex_test, 9);
 	fileToHex(P->files[0], hex_test);
 	printf("hex = %s\n", hex_test);
 }

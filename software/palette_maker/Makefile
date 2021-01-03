@@ -14,9 +14,9 @@ SRC_DIR	=	  ./src/
 OBJ_DIR	=	  ./obj/
 INC_DIR	=	  ./header/
 NAME	=	  palette_maker
-CFLAG	=	  -Werror -Wextra -Wall
-LIB		=	  -L./libft/ -lft libft/libft.a
-CC		=	  gcc
+CFLAG	=	  -Werror -Wextra -Wall -O0 -g
+LIB     =	  -L./libft/ -lft libft/libft.a -lm
+CC      =	  clang-11
 
 SRCS	=	  $(addprefix $(SRC_DIR),$(SRC))
 OBJ		=	  $(SRC:.c=.o)
