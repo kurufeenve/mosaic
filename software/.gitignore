@@ -1,0 +1,4 @@
+valgrind-out.txt
+**/*.swp
+**/*.swm
+**/*.o

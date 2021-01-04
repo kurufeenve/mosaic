@@ -58,9 +58,14 @@ clean:
 
 fclean: clean
 		@rm -rf $(NAME)
-		@rm -rf img/processed_image.bmp
+		@rm -rf ./test_palette/palette.hex
 
 re: fclean all
 
 run: all
-		@./palette_maker ./test_palette/10x10/ test_palette
+		@rm -rf ./test_palette/palette.hex
+		@./palette_maker ./test_palette/10x10/ ./test_palette/palette.hex
+
+valgrind: all
+		@rm -rf ./test_palette/palette.hex
+		@valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./palette_maker ./test_palette/10x10/ ./test_palette/palette.hex

@@ -58,6 +58,7 @@ typedef struct	palette
 {
 	char		*folder_name;
 	char		**files;
+	uint16_t	files_num;
 	uint32_t	*colors;
 	char		*palette_name;
 	char		*lookup_table;
