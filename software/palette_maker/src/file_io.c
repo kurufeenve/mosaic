@@ -55,15 +55,16 @@ void	writeFile(const char *file_name, const char *string)
 {
 	int	fd;
 	mode_t	modes;
+	size_t	str_len;
 
+	str_len = ft_strlen(string);
 	modes = S_IRWXU|S_IRGRP|S_IROTH;
 	if ((fd = open(file_name, O_CREAT|O_EXCL|O_WRONLY, modes)) < 3)
 	{
-		printf("fd = %d\tfile_name = %s\n", fd, file_name);
 		perror("function: writeFile\nfailed to open the file\n");
 		exit(EXIT_FAILURE);
 	}
-	if (write(fd, (void *)string, ft_strlen(string)) <= 0)
+	if (write(fd, (void *)string, str_len) <= 0)
 	{
 		perror("function: writeFile\nfailed to write the palette to the file\n");
 		exit(EXIT_FAILURE);

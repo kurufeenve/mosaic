@@ -2,19 +2,23 @@
 SRC 	=	  palette_maker.c\
 			  file_sys_navigation.c\
 			  file_io.c\
-			  color_convertion.c
+			  color_convertion.c\
+			  garbage_collector.c\
+			  arg_parser.c
  
 INC		=	  header/palette_maker.h\
 			  header/common.h\
 			  header/file_sys_navigation.h\
 			  file_io.h\
-			  color_convertion.h
+			  color_convertion.h\
+			  garbage_collector.h\
+			  arg_parser.h
 
 SRC_DIR	=	  ./src/
 OBJ_DIR	=	  ./obj/
 INC_DIR	=	  ./header/
 NAME	=	  palette_maker
-CFLAG	=	  -Werror -Wextra -Wall -O0 -g
+CFLAG	=	  -Werror -Wextra -Wall -O0 -ggdb3
 LIB     =	  -L./libft/ -lft libft/libft.a -lm
 CC      =	  clang-11
 

@@ -51,7 +51,7 @@ int		filesNum(char *dir_name, char *file_ext)
     {
 		if (!(memcmp((void *)(&entry->d_name[ft_strlen(entry->d_name) - BMP_LEN]), (void *)file_ext, ft_strlen(file_ext))))
 		{	
-        	sum++;
+        		sum++;
 		}
     }
     closedir(folder);

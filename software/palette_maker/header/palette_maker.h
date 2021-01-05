@@ -7,5 +7,7 @@
 #include "file_io.h"
 #include "../libft/includes/libft.h"
 #include "color_convertion.h"
+#include "garbage_collector.h"
+#include "arg_parser.h"
 
 #endif

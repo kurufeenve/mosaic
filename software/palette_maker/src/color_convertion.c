@@ -43,6 +43,7 @@ void	uintToString(uint8_t *color, char *string)
 			j++;
 		}
 		memcpy((void *)&string[j], buf, buf_len);
+		free(buf);
 		if (buf_len < 2)
 		{
 			j++;
@@ -105,7 +106,7 @@ void	converter(Palette *P)
 	char	*palette;
 
 	palette = ft_strnew(P->files_num * COLOR_LEN);
-	ft_bzero(palette, (P->files_num * COLOR_LEN));
+	//ft_bzero(palette, (P->files_num * COLOR_LEN));
 	for (uint16_t i = 0; i < P->files_num; i++)
 	{
 		ft_memset((void *)&palette[i * COLOR_LEN], '0', 8);
