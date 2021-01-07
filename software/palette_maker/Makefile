@@ -6,9 +6,9 @@ SRC 	=	  palette_maker.c\
 			  garbage_collector.c\
 			  arg_parser.c
  
-INC		=	  header/palette_maker.h\
-			  header/common.h\
-			  header/file_sys_navigation.h\
+INC		=	  palette_maker.h\
+			  common.h\
+			  file_sys_navigation.h\
 			  file_io.h\
 			  color_convertion.h\
 			  garbage_collector.h\
@@ -18,9 +18,9 @@ SRC_DIR	=	  ./src/
 OBJ_DIR	=	  ./obj/
 INC_DIR	=	  ./header/
 NAME	=	  palette_maker
-CFLAG	=	  -Werror -Wextra -Wall -O0 -ggdb3
+CFLAG	=	  -Werror -Wextra -Wall -O0 -g
 LIB     =	  -L./libft/ -lft libft/libft.a -lm
-CC      =	  clang-11
+CC      =	  gcc
 
 SRCS	=	  $(addprefix $(SRC_DIR),$(SRC))
 OBJ		=	  $(SRC:.c=.o)

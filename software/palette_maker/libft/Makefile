@@ -31,7 +31,7 @@ OFILES = ft_atoi.o ft_bzero.o ft_isalnum.o ft_isalpha.o ft_isascii.o ft_isdigit.
 		ft_print_bytes.o ft_get_address.o ft_endian_swap.o
 
 FLAG = -Wall -Wextra -Werror
-CC   = clang-11
+CC   = gcc
 
 .PHONY: all clean fclean re
 
