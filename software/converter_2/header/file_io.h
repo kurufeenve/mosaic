@@ -9,6 +9,7 @@
 /* INTERNAL */
 #include "common.h"
 
-uint8_t readBMP(const char *file_name, uint8_t *headers, uint8_t **data);
+void    readBMP(const char *file_name, uint8_t *headers, uint8_t **data);
+void    writeBMP(const char *file_name, Converter C);
 
 #endif

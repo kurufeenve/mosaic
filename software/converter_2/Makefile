@@ -60,13 +60,13 @@ clean:
 
 fclean: clean
 		@rm -rf $(NAME)
-		@rm -rf img/processed_image.bmp
+		@rm -rf test_img/processed_image.bmp
 
 re: fclean all
 
 run: all
-		@rm -rf img/processed_image.bmp
-		@./converter ./test_img/test_2.bmp
+		@rm -rf test_img/processed_image.bmp
+		@./converter ./test_img/test_2.bmp 969 551 DDCCBB
 
 valgrind: all
 		@rm -rf img/processed_image.bmp

@@ -13,7 +13,10 @@
 #define R 2
 #define A 3
 
-#define FULL_HEADER_SIZE (sizeof(FileHeader) + sizeof(InfoHeader))
+#define X 0
+#define Y 1
+
+#define FULL_HEADER_SIZE (sizeof(FileHeader) + sizeof(InfoHeader) + sizeof(ColorHeader))
 
 typedef struct	tagBITMAPFILEHEADER
 {
@@ -39,10 +42,21 @@ typedef struct	tagBITMAPINFOHEADER
 	uint32_t	biClrImportant;
 } __attribute__((__packed__)) InfoHeader;
 
+typedef struct  BMPColorHeader
+{
+    uint32_t    red_mask;
+    uint32_t    green_mask;
+    uint32_t    blue_mask;
+    uint32_t    alpha_mask;
+    uint32_t    color_space_type;
+    uint32_t    unused[16];
+} __attribute__((__packed__)) ColorHeader;
+
 typedef struct	headers
 {
 	FileHeader	file_h;
 	InfoHeader	info_h;
+    ColorHeader color_h;
 }				Headers;
 
 typedef union	pixel
@@ -54,7 +68,11 @@ typedef union	pixel
 typedef struct  converter
 {
     char        *img_name;
+    Headers     headers;
+    uint8_t     *original_palette;
     uint8_t     *data;
+    uint32_t    phys_size[2]; /*physical size where 0 is x and 1 is y*/
+    Pixel       mesh_color;
 }               Converter;
 
 #endif
