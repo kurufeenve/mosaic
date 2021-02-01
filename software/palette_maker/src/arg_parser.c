@@ -8,7 +8,7 @@
 
 void	args_parse(Palette *P, int argc, char **argv)
 {
-	char	help[] = "./palette_maker dirname /path/palette_name\n";
+	char	help[] = "./palette_maker /path/dirname /path/palette_name\n";
 
 	if (argc == 2 && argv[1][0] == '-' && argv[1][1] == 'h')
 	{

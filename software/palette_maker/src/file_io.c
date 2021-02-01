@@ -2,25 +2,25 @@
 
 /******************************************************************************/
 /*                                                                            */
-/*       reading the contents of the file                                     */
+/*       reading the contents of the BMP image                                */
 /*       and writing it into the data var                                     */
 /*                                                                            */
 /******************************************************************************/
 
-void	readFile(const char *file_name, uint8_t *headers, uint8_t **data)
+void	readBMP(const char *file_name, uint8_t *headers, uint8_t **data)
 {
-	int		fd;
-	int		image_size;
+	int         fd;
+	int         image_size;
 	uint8_t		*tresh_buf;
 
 	if ((fd = open(file_name, O_RDONLY)) < 3)
 	{
-		perror("function: readFile\nfailed to open the file\n");
+		perror("function: readBMP\nfailed to open the file\n");
 		exit(EXIT_FAILURE);
 	}
 	if (read(fd, headers, FULL_HEADER_SIZE) <= 0)
 	{
-		perror("function: readFile\nfailed to read the header from the file\n");
+		perror("function: readBMP\nfailed to read the header from the file\n");
 		exit(EXIT_FAILURE);
 	}
 
@@ -28,7 +28,7 @@ void	readFile(const char *file_name, uint8_t *headers, uint8_t **data)
 	tresh_buf = (uint8_t *)malloc(sizeof(uint8_t) * image_size);
 	if (read(fd, tresh_buf, image_size) <= 0)
 	{
-		perror("function: readFile\nfailed to read the tresh from the file\n");
+		perror("function: readBMP\nfailed to read the tresh from the file\n");
 		exit(EXIT_FAILURE);
 	}
 	free(tresh_buf);
@@ -38,7 +38,7 @@ void	readFile(const char *file_name, uint8_t *headers, uint8_t **data)
 	*data = (uint8_t *)malloc(sizeof(uint8_t) * image_size);
 	if (read(fd, *data, image_size) <= 0)
 	{
-		perror("function: readFile\nfailed to read the data from the file\n");
+		perror("function: readBMP\nfailed to read the data from the file\n");
 		exit(EXIT_FAILURE);
 	}
 

@@ -70,7 +70,7 @@ void	fileToHex(char *file_name, char *hex)
 	int		j;
 	Pixel		color;
 
-	readFile(file_name, (uint8_t *)&headers, &data);
+	readBMP(file_name, (uint8_t *)&headers, &data);
 	image_size = headers.file_h.bfSize - headers.file_h.bfOffBits;
 	buf = (uint8_t *)malloc(sizeof(uint8_t) * (image_size / 2));
 	while (image_size > 7)
