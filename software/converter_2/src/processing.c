@@ -2,11 +2,28 @@
 
 /*****************************************************************************/
 /*                                                                           */
+/*       getting pixel from coordinates                                      */
+/*                                                                           */
+/*****************************************************************************/
+
+static void    getPixel(Pixel *P, Converter C, uint32_t x, uint32_t y)
+{
+    uint32_t    byte_index;
+
+    byte_index = y * C->headers.info_h.biWidth * 4 + x * 4;
+    P->channel[R] = C.data[byte_index + R];
+    P->channel[G] = C.data[byte_index + G];
+    P->channel[B] = C.data[byte_index + B];
+    P->channel[A] = C.data[byte_index + A];
+}
+
+/*****************************************************************************/
+/*                                                                           */
 /*       setting pixel in coordinates                                        */
 /*                                                                           */
 /*****************************************************************************/
 
-void    putPixel(Pixel P, Converter *C, uint32_t x, uint32_t y)
+static void    putPixel(Pixel P, Converter *C, uint32_t x, uint32_t y)
 {
     uint32_t    byte_index;
 
@@ -41,18 +58,29 @@ static void    meshColoring(Converter *C)
     }
 }
 
-static void    processTile(uint8_t *data, x_start, y_start)
+static void    processTile(Converter *C, uint32_t x_start, uint32_t y_start)
 {
+    Pixel       P;
+    uint32_t    x_end = x_start + TILE_SIZE;
+    uint32_t    y_end = y_start + TILE_SIZE;
 
+    P.color = 0x0000ffff;
+    for (uint32_t y = y_start; y < y_end; y++)
+    {
+        for (uint32_t x = x_start; x < x_end; x++)
+        {
+            putPixel(P, C, x, y);
+        }
+    }
 }
 
 static void    iterateTile(Converter *C)
 {
-    for (y = 1; y < C->headers.info_h.biHeight; y+=11)
+    for (int y = 1; y < C->headers.info_h.biHeight; y+=11)
     {
         for (int x = 1; x < C->headers.info_h.biWidth; x+=11)
         {
-
+            processTile(C, x, y);
         }
     }
 }
@@ -73,5 +101,6 @@ void    processing(Converter *C)
 		exit(EXIT_FAILURE);
     }
     meshColoring(C);
+    iterateTile(C);
     writeBMP("test_img/processed_image.bmp", *C);
 }
