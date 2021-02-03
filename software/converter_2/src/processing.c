@@ -10,7 +10,7 @@ static void    getPixel(Pixel *P, Converter C, uint32_t x, uint32_t y)
 {
     uint32_t    byte_index;
 
-    byte_index = y * C->headers.info_h.biWidth * 4 + x * 4;
+    byte_index = y * C.headers.info_h.biWidth * 4 + x * 4;
     P->channel[R] = C.data[byte_index + R];
     P->channel[G] = C.data[byte_index + G];
     P->channel[B] = C.data[byte_index + B];
@@ -61,18 +61,33 @@ static void    meshColoring(Converter *C)
 static void    processTile(Converter *C, uint32_t x_start, uint32_t y_start)
 {
     Pixel       P;
-    uint32_t    x_end = x_start + TILE_SIZE;
+    uint8_t     *buf;
+    uint32_t    buf_it;
+    //uint32_t    x_end = x_start + TILE_SIZE;
     uint32_t    y_end = y_start + TILE_SIZE;
 
     P.color = 0x0000ffff;
+    buf = (uint8_t *)malloc(sizeof(uint8_t) * TILE_SIZE * TILE_SIZE * 4);
+    buf_it = 0;
     for (uint32_t y = y_start; y < y_end; y++)
     {
-        for (uint32_t x = x_start; x < x_end; x++)
+        /*for (uint32_t x = x_start; x < x_end; x++)
         {
             putPixel(P, C, x, y);
-        }
+        }*/
+        ft_memcpy((void *)&buf[buf_it],
+            (void *)&C->data[y * C->headers.info_h.biWidth * 4 + x_start * 4],
+            TILE_SIZE * 4);
+        buf_it += (TILE_SIZE * 4);
     }
+    free(buf);
 }
+
+/******************************************************************************/
+/*                                                                            */
+/*       iterates through tiles' first pixel coordinates                      */
+/*                                                                            */
+/******************************************************************************/
 
 static void    iterateTile(Converter *C)
 {
