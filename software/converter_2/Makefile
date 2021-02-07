@@ -3,14 +3,18 @@ SRC 	=	converter.c\
 			arg_parser.c\
 			file_io.c\
 			garbage_collector.c\
-			processing.c
+			processing.c\
+            color_processing.c\
+            tile_processing.c
  
 INC		=	converter.h\
 			common.h\
 			arg_parser.h\
 			file_io.h\
 			garbage_collector.h\
-			processing.h
+			processing.h\
+            color_processing.h\
+            tile_processing.h
 
 SRC_DIR	=	  ./src/
 OBJ_DIR	=	  ./obj/
@@ -66,7 +70,7 @@ re: fclean all
 
 run: all
 		@rm -rf test_img/processed_image.bmp
-		@./converter ./test_img/test_2.bmp 969 551 DDCCBB
+		@./converter ./test_img/test_2.bmp 969 551 DDCCBB ../palette_maker/test_palette/palette.hex
 
 valgrind: all
 		@rm -rf img/processed_image.bmp

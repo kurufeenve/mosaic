@@ -79,3 +79,20 @@ void    writeBMP(const char *file_name, Converter C)
     close(fd);
 
 }
+
+void    readPalette(Converter *C)
+{
+    int     fd;
+    uint8_t buf[8];
+    int     res;
+
+	if ((fd = open(C->palette_name, O_RDONLY)) < 3)
+	{
+        my_exit(fd, "function: readPalette\nfailed to open the file\n");
+	}
+    res = 1;
+    while(res)
+    {
+        res = read(fd, buf, 8);
+    }
+}

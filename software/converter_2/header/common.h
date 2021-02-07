@@ -73,6 +73,8 @@ typedef struct  converter
     uint8_t     *data;
     uint32_t    phys_size[2]; /*physical size where 0 is x and 1 is y*/
     Pixel       mesh_color;
+    char        *palette_name;
+    uint8_t     *palette;
 }               Converter;
 
 #endif

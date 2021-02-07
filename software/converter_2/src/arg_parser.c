@@ -40,9 +40,11 @@ static void    get_mesh_color(Converter *C, char *color)
 
 void	args_parse(Converter *C, int argc, char **argv)
 {
-	char	help[] = "./converter /path/image_name width height mesh_color\n"
+	char	help[] = "./converter /path/image_name width height mesh_color"
+        " path_to_palette.hex\n"
         "physical size should be given in mm\n"
         "mesh_color shoud be 3 or 4 bytes in HEX BGR or BGRA\n";
+    size_t  path_len;
 
 	if (argc == 2 && argv[1][0] == '-' && argv[1][1] == 'h')
 	{
@@ -56,9 +58,13 @@ void	args_parse(Converter *C, int argc, char **argv)
         collect_garbage(C);
 		exit(EXIT_SUCCESS);
 	}
-    C->img_name = ft_strnew(ft_strlen(argv[1]));
-    memcpy(C->img_name, argv[1], ft_strlen(argv[1]));
+    path_len = ft_strlen(argv[1]);
+    C->img_name = ft_strnew(path_len);
+    memcpy(C->img_name, argv[1], path_len);
     C->phys_size[X] = ft_atoi(argv[2]);
     C->phys_size[Y] = ft_atoi(argv[3]);
     get_mesh_color(C, argv[4]);
+    path_len = ft_strlen(argv[5]);
+    C->palette_name = ft_strnew(path_len);
+    memcpy(C->palette_name, argv[5], path_len);
 }

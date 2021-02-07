@@ -5,7 +5,7 @@
 #include "common.h"
 #include "garbage_collector.h"
 
-#define ARGS_NUM 5
+#define ARGS_NUM 6
 
 void	args_parse(Converter *C, int argc, char **argv);
 
