@@ -5,7 +5,8 @@ SRC 	=	converter.c\
 			garbage_collector.c\
 			processing.c\
             color_processing.c\
-            tile_processing.c
+            tile_processing.c\
+            color_comparison.c
  
 INC		=	converter.h\
 			common.h\
@@ -14,13 +15,15 @@ INC		=	converter.h\
 			garbage_collector.h\
 			processing.h\
             color_processing.h\
-            tile_processing.h
+            tile_processing.h\
+            color_comparison.c
 
 SRC_DIR	=	  ./src/
 OBJ_DIR	=	  ./obj/
 INC_DIR	=	  ./header/
 NAME	=	  converter
 CFLAG	=	  -Werror -Wextra -Wall -O0 -g
+ASM     =     -S -masm=intel -o source.asm
 LIB     =	  -L./libft/ -lft libft/libft.a -lm
 CC      =	  gcc
 

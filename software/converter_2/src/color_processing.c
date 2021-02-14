@@ -11,10 +11,11 @@ void    getPixel(Pixel *P, Converter C, uint32_t x, uint32_t y)
     uint32_t    byte_index;
 
     byte_index = y * C.headers.info_h.biWidth * 4 + x * 4;
-    P->channel[R] = C.data[byte_index + R];
+    P->color = *(uint32_t *)&C.data[byte_index];
+    /*P->channel[R] = C.data[byte_index + R];
     P->channel[G] = C.data[byte_index + G];
     P->channel[B] = C.data[byte_index + B];
-    P->channel[A] = C.data[byte_index + A];
+    P->channel[A] = C.data[byte_index + A];*/
 }
 
 /*****************************************************************************/
@@ -28,10 +29,11 @@ void    setPixel(Pixel P, Converter *C, uint32_t x, uint32_t y)
     uint32_t    byte_index;
 
     byte_index = y * C->headers.info_h.biWidth * 4 + x * 4;
-    C->data[byte_index + R] = P.channel[R];
+    *(uint32_t *)&C->data[byte_index] = P.color;
+    /*C->data[byte_index + R] = P.channel[R];
     C->data[byte_index + G] = P.channel[G];
     C->data[byte_index + B] = P.channel[B];
-    C->data[byte_index + A] = P.channel[A];
+    C->data[byte_index + A] = P.channel[A];*/
 }
 
 /******************************************************************************/
@@ -40,7 +42,7 @@ void    setPixel(Pixel P, Converter *C, uint32_t x, uint32_t y)
 /*                                                                            */
 /******************************************************************************/
 
-static Pixel	colorAverage(Pixel p1, Pixel p2)
+Pixel	colorAverage(Pixel p1, Pixel p2)
 {
 	Pixel		avg;
 
@@ -55,43 +57,20 @@ static Pixel	colorAverage(Pixel p1, Pixel p2)
 	return (avg);
 }
 
-/*****************************************************************************/
-/*                                                                           */
-/*       finding average color                                               */
-/*                                                                           */
-/*****************************************************************************/
-
-void    tileAverage(Pixel *P, uint8_t *data, uint32_t len)
+void    getPaletteColor(void *color, Palette Pal)
 {
-	uint8_t		*buf;
-	uint32_t    image_size;
-	uint32_t    j;
-	Pixel		color;
+    uint64_t    dif[2];
+    uint32_t    color_number;
 
-	image_size = len;
-	buf = (uint8_t *)malloc(sizeof(uint8_t) * (image_size / 2));
-	while (image_size > 7)
-	{
-		j = 0;
-		for (uint32_t i = 0; i < image_size - 7; i+=8)
-		{
-			color = colorAverage(*((Pixel *)(&(data[i]))),
-					*((Pixel *)(&(data[i + 4]))));
-			ft_memcpy((void *)(&(buf[j])),
-				(void *)(&(color.color)), 4);
-			j += 4;
-		}
-		ft_bzero(data, image_size);
-		image_size /= 2;
-		memcpy((void *)data, (void *)buf, image_size);
-		ft_bzero(buf, image_size);
-	}
-	free(buf);
-    for (uint32_t i = 4; i < len; i+=4)
+    dif[1] = -1;
+    for (uint32_t i = 0; i < Pal.palette_size; i++)
     {
-        data[i + R] = data[R];
-        data[i + G] = data[G];
-        data[i + B] = data[B];
-        data[i + A] = data[A];
+        dif[0] = matchColorEuclidean(color, (void *)&Pal.palette[i].color);
+        if (dif[0] < dif[1])
+        {
+            dif[1] = dif[0];
+            color_number = i;
+        }
     }
+    memcpy(color, (void *)&Pal.palette[color_number].color, 4);
 }

@@ -65,6 +65,6 @@ void	args_parse(Converter *C, int argc, char **argv)
     C->phys_size[Y] = ft_atoi(argv[3]);
     get_mesh_color(C, argv[4]);
     path_len = ft_strlen(argv[5]);
-    C->palette_name = ft_strnew(path_len);
-    memcpy(C->palette_name, argv[5], path_len);
+    C->palette.palette_name = ft_strnew(path_len);
+    memcpy(C->palette.palette_name, argv[5], path_len);
 }

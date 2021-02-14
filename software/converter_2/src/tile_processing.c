@@ -24,6 +24,12 @@ static uint8_t *readTile(Converter *C, uint32_t x_start, uint32_t y_start)
     return (buf);
 }
 
+/******************************************************************************/
+/*                                                                            */
+/*       write color to a tile coordinates                                    */
+/*                                                                            */
+/******************************************************************************/
+
 static void    writeTile(Converter *C, uint32_t x_start, uint32_t y_start,
         Pixel P)
 {
@@ -34,11 +40,43 @@ static void    writeTile(Converter *C, uint32_t x_start, uint32_t y_start,
     {
         for (uint32_t x = x_start; x < x_end; x++)
         {
-            ft_memcpy(
-            (void *)&C->data[y * C->headers.info_h.biWidth * 4 + x_start * 4],
-            (void *)&P.color, 4);
+            *(uint32_t *)&C->data[y * C->headers.info_h.biWidth * 4
+                + x * 4] = P.color;
         }
     }
+}
+
+/*****************************************************************************/
+/*                                                                           */
+/*       finding average color                                               */
+/*                                                                           */
+/*****************************************************************************/
+
+static void    tileAverage(uint8_t *data, uint32_t len)
+{
+	uint8_t		*buf;
+	uint32_t    image_size;
+	uint32_t    j;
+    Pixel       P;
+
+	image_size = len;
+	buf = (uint8_t *)malloc(sizeof(uint8_t) * (image_size / 2));
+	while (image_size > 7)
+	{
+		j = 0;
+		for (uint32_t i = 0; i < image_size - 7; i+=8)
+		{
+			P = colorAverage(*((Pixel *)(&(data[i]))),
+					*((Pixel *)(&(data[i + 4]))));
+			ft_memcpy((void *)(&(buf[j])), (void *)(&(P.color)), 4);
+			j += 4;
+		}
+		ft_bzero(data, image_size);
+		image_size /= 2;
+		memcpy((void *)data, (void *)buf, image_size);
+		ft_bzero(buf, image_size);
+	}
+	free(buf);
 }
 
 /******************************************************************************/
@@ -52,13 +90,13 @@ static void    writeTile(Converter *C, uint32_t x_start, uint32_t y_start,
 
 static void    processTile(Converter *C, uint32_t x_start, uint32_t y_start)
 {
-    Pixel       P;
     uint8_t     *buf;
 
     buf = readTile(C, x_start, y_start);
-    tileAverage(&P, buf, (TILE_SIZE * TILE_SIZE * 4));
+    tileAverage(buf, (TILE_SIZE * TILE_SIZE * 4));
+    getPaletteColor((void *)buf, C->palette);
+    writeTile(C, x_start, y_start, *(Pixel *)buf);
     free(buf);
-    writeTile(C, x_start, y_start, P);
 }
 
 /******************************************************************************/

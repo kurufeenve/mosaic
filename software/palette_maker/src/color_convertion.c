@@ -30,7 +30,7 @@ Pixel	colorAverage(Pixel p1, Pixel p2)
 void	uintToString(uint8_t *color, char *string)
 {
 	char	*buf;
-	int	j;
+	int     j;
 	size_t	buf_len;
 
 	j = 0;

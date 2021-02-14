@@ -80,19 +80,51 @@ void    writeBMP(const char *file_name, Converter C)
 
 }
 
+/******************************************************************************/
+/*                                                                            */
+/*       reads palette file and converts ascii to hex array                   */
+/*                                                                            */
+/******************************************************************************/
+
 void    readPalette(Converter *C)
 {
     int     fd;
-    uint8_t buf[8];
+    uint8_t buf[9] = {0};
+    uint8_t channel[3] = {0};
     int     res;
+    Pixel   P;
 
-	if ((fd = open(C->palette_name, O_RDONLY)) < 3)
+	if ((fd = open(C->palette.palette_name, O_RDONLY)) < 3)
 	{
         my_exit(fd, "function: readPalette\nfailed to open the file\n");
 	}
     res = 1;
+    C->palette.palette_size = 0;
     while(res)
     {
-        res = read(fd, buf, 8);
+        res = read(fd, buf, 9);
+        if (res < 1)
+        {
+            break ;
+        }
+        for (int i = 0; i < 4; i++)
+        {
+            memcpy((void *)channel, (void *)&buf[i * 2], 2);
+            P.channel[i] = ft_atoi_base((const char *)channel, 16);
+        }
+        memset((void *)buf, 0, 9);
+        if (P.channel[A] != 0xFF)
+        {
+            P.channel[A] = 0xFF;
+        }
+        C->palette.palette = (Pixel *)ft_memjoin((void *)C->palette.palette,
+                (void *)&P, C->palette.palette_size * sizeof(Pixel),
+                sizeof(Pixel));
+        C->palette.palette_size++;
     }
+    if (C->palette.palette_size == 0)
+    {
+        my_exit(fd, "function: readPalette\nfailed to read the palette\n");
+    }
+    close(fd);
 }

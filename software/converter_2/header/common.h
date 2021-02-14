@@ -65,6 +65,13 @@ typedef union	pixel
 	uint8_t		channel[4];
 }				Pixel;
 
+typedef struct  palette
+{
+    char        *palette_name;
+    Pixel       *palette;
+    uint32_t    palette_size;
+}               Palette;
+
 typedef struct  converter
 {
     char        *img_name;
@@ -73,8 +80,7 @@ typedef struct  converter
     uint8_t     *data;
     uint32_t    phys_size[2]; /*physical size where 0 is x and 1 is y*/
     Pixel       mesh_color;
-    char        *palette_name;
-    uint8_t     *palette;
+    Palette     palette;
 }               Converter;
 
 #endif
